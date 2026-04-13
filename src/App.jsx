@@ -4,17 +4,19 @@ import HomePage from '../pages/homePage'
 import ProductCard from './components/productCard'
 import AdminPage from '../pages/adminPage'
 import { Routes, Route } from 'react-router-dom'
+import TestPage from '../pages/test'
 
 export default function App() {
   
 
   return (
     
-        <div className= 'w-full h-screen border-[6px] relative'>
+        <div className= 'w-full h-screen  relative bg-primary text-accent'>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/products' element={<ProductCard />} />
-            <Route path='/admin' element={<AdminPage />} />
+            <Route path='/admin/*' element={<AdminPage />} />
+            <Route path='/test' element={<TestPage />} />
           </Routes>
         </div>
 
