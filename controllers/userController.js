@@ -84,7 +84,7 @@ export async function loginUser(req, res){
                     isEmailVerified: user.isEmailVerified
                 }
 
-                const token = jwt.sign(payload, "secret-key" , {expiresIn: "1h"});
+                const token = jwt.sign(payload, process.env.JWT_SECRET_KEY , {expiresIn: "1h"});
                 res.status(200).json(
                     {
                         token: token,

@@ -13,7 +13,7 @@ dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 const omdm_api_key = "a2ae95f2"
-const mongourl = process.env.MONGO_URL || "mongodb://localhost:27017/icomputers";
+const mongourl = process.env.MONGO_URL
 
 app.use(cors());
 app.use(express.json()); 

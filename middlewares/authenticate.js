@@ -7,7 +7,7 @@ export default function authenticateUser(req, res, next){
             if(header != null){
                 const token = header.replace("Bearer ", "");
 
-                jwt.verify(token, "secret-key",
+                jwt.verify(token, process.env.JWT_SECRET_KEY,
                     (error, decoded)=>{
                         console.log(decoded)
     
