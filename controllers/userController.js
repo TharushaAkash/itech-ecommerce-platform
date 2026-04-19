@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 
 
-
+//Create user
 export async function createUser(req, res){
     if(req.user == null){
         res.status(401).json(
@@ -54,6 +54,8 @@ export async function createUser(req, res){
 }
 
 
+//Login User
+
 export async function loginUser(req, res){
     try{
         const email = req.body.email;
@@ -86,6 +88,8 @@ export async function loginUser(req, res){
                 res.status(200).json(
                     {
                         token: token,
+                        user: payload,
+                        isAdmin: user.isAdmin,
                         message: "User Logged successfully"
                     }
                 )
