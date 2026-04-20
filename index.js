@@ -26,12 +26,12 @@ mongoose.connect(mongourl).then(
     }
 )
 
-
-
-app.use("/students" , studentRouter);  //localhost:3000/students
-app.use("/products", productRouter);
-app.use("/users", userRouter);
 app.use(authenticateUser);
+
+app.use("/api/students" , studentRouter);  //localhost:3000/students
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
+
 
 app.listen(3000, ()=>{
     console.log("Server started....")
