@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage(){
 
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
+    const navigate =useNavigate()
 
     async function handleLogin(){
         console.log("Email: ", email);
@@ -13,16 +15,31 @@ export default function LoginPage(){
 
         //Backend running on localhost 3000/users/login
         try{
-        const response = await axios.post("http://localhost:3000/users/login" , {
+        const response = await axios.post(import.meta.env.VITE_API_URL +"/users/login" , {
             email: email,
             password: password
         })
         if(response){
             console.log(response.data);
             console.log("Wellcome back! ", response.data.user.firstName);
+            localStorage.setItem("token", response.data.token);
+            //alert(response.data.message);
+            toast.success(response.data.message);
+
+            if(response.data.isAdmin){
+                //Redirect to admin dashboard
+                //window.location.href = "/admin"; this method will cause a full page reload, we can use react router for better user experience
+                navigate("/admin");
+            }else{
+                //Redirect to home page
+                //window.location.href = "/";
+                navigate("/");
+            }
         }
     } catch (error) {
         console.error("Error occurred while logging in:", error);
+        //alert(error.response.data.message);
+        toast.error(error.response.data.message);
     }
     }
 

@@ -6,6 +6,7 @@ import AdminPage from '../pages/adminPage'
 import { Routes, Route } from 'react-router-dom'
 import TestPage from '../pages/test'
 import LoginPage from '../pages/loginPage'
+import { Toaster } from 'react-hot-toast'
 
 export default function App() {
   
@@ -13,6 +14,7 @@ export default function App() {
   return (
     
         <div className= 'w-full h-screen  relative bg-primary'>
+          <Toaster position='top-center' />
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/products' element={<ProductCard />} />
