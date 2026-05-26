@@ -52,6 +52,7 @@ export async function createProduct(req, res){
         )
 
     }catch(err){
+        console.log(err.message)
         res.status(500).json(
             {
                 message: "Error creating Product",
