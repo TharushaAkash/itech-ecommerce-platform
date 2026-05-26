@@ -6,22 +6,22 @@ import jwt from "jsonwebtoken";
 
 //Create user
 export async function createUser(req, res){
-    if(req.user == null){
-        res.status(401).json(
-            {
-                message: "Unauthorized User, Please login to create user"
-            }
-        )
-        return;
-    }
-    if(!req.user.isAdmin){
-        res.status(403).json(
-            {
-                Message: "Only Admin can create user"
-            }
-        )
-        return;
-    }
+    // if(req.user == null){
+    //     res.status(401).json(
+    //         {
+    //             message: "Unauthorized User, Please login to create user"
+    //         }
+    //     )
+    //     return;
+    // }
+    // if(!req.user.isAdmin){
+    //     res.status(403).json(
+    //         {
+    //             Message: "Only Admin can create user"
+    //         }
+    //     )
+    //     return;
+    // }
 
     try{
         const data = req.body
