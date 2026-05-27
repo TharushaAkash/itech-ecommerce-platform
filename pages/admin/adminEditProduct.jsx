@@ -1,25 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import uploadMedia from "../../src/utils/mediaUpload";
 import axios from "axios";
 
-export default function AddProduct(){
-    const [productId, setProductId] = useState('');
-    const [name, setName] = useState('');
-    const [altNames, setAltNames] = useState('');
-    const [price, setPrice] = useState('');
-    const [labeledPrice, setLabeledPrice] = useState('');
-    const [description, setDescription] = useState('');
-    const [images, setImages] = useState([]);
-    const [brand, setBrand] = useState('');
-    const [model, setModel] = useState('');
-    const [category, setCategory] = useState('');
-    const [isAvailable, setIsAvailable] = useState(true);
-    const [stock, setStock] = useState('');
+export default function AdminEditProduct(){
 
+    const location = useLocation();
     const navigate = useNavigate();
 
+    const [productId, setProductId] = useState(location.state?.productId);
+    const [name, setName] = useState(location.state?.name);
+    const [altNames, setAltNames] = useState(location.state?.altNames.join(','));
+    const [price, setPrice] = useState(location.state?.price);
+    const [labeledPrice, setLabeledPrice] = useState(location.state?.labeledPrice);
+    const [description, setDescription] = useState(location.state?.description);
+    const [images, setImages] = useState([]);
+    const [brand, setBrand] = useState(location.state?.brand);
+    const [model, setModel] = useState(location.state?.model);
+    const [category, setCategory] = useState(location.state?.category);
+    const [isAvailable, setIsAvailable] = useState(location.state?.isAvailable);
+    const [stock, setStock] = useState(location.state?.stock);
+
+    useEffect(
+        () => {
+            if(location.state == null){
+                toast.error("No product data found. Please select a product to edit.");
+                navigate("/admin/products");
+            }
+        },[]
+    )
+    
+
+    const product = location.state?.product;
+   
     async function handleSave(){
         try{
             //token is saved when login
@@ -75,11 +89,11 @@ export default function AddProduct(){
         <div className="w-full h-full flex flex-col items-center p-4 overflow-y-scroll">
             {/* header div */}
             <div className=" sticky top-0 w-full h-[100px] bg-accent text-white rounded-lg flex items-center p-5 justify-between">
-                <h1 className="text-2xl font-semibold ">Add New Peoduct</h1>
+                <h1 className="text-2xl font-semibold ">Edit Product</h1>
 
                 {/* Header button div */}
                 <div className="h-full flex justify-center items-center">
-                    <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-400">Save</button>
+                    <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-400">Update</button>
                     <button className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Cancel</button>
                 </div>
             </div>

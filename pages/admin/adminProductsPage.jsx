@@ -1,38 +1,52 @@
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { toast } from "react-hot-toast";
+import LoadingAnimation from "../../src/components/loadingAnimation";
+import ProductDeleteModel from "../../src/components/productDeleteModel";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductPage(){
 
     const [products, setProducts] = useState([]);
+    const [productsLoading, setProductsLoading] = useState(false);
+    const navigate = useNavigate();
+
 
     //call Backend API when loading the page
     const token = localStorage.getItem("token");
 
     useEffect(
         () => {
-            axios.get(import.meta.env.VITE_API_URL+"/products", {
+            if(!productsLoading){
+                axios.get(import.meta.env.VITE_API_URL+"/products", {
                 headers: {
                     "Authorization": "Bearer " + token
             }
             }).then(
                 (response) => {
                     setProducts(response.data.products);
+                    setProductsLoading(true);
                 }
             ).catch(
                 (error) => {
                     console.error("Error fetching products: ", error);
                 }
             )
-        },[])
+
+            }
+            
+        },[productsLoading])
 
     
 
 
     return(
-    <div className="w-full min-h-screen bg-primary p-6 overflow-y-auto">
+    <div className="w-full h-full bg-primary p-6 overflow-y-auto">
 
         {/* Header */}
         <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-lg rounded-3xl px-8 py-6 flex items-center justify-between">
@@ -62,6 +76,9 @@ export default function ProductPage(){
 
             <div className="overflow-x-auto">
 
+
+                {
+                    productsLoading ? 
                 <table className="w-full">
 
                     {/* Table Header */}
@@ -77,6 +94,7 @@ export default function ProductPage(){
                             <th className="p-5 text-center">Category</th>
                             <th className="p-5 text-center">Availability</th>
                             <th className="p-5 text-center">Stock</th>
+                            <th className="p-5 text-center">Actions</th>
 
                         </tr>
 
@@ -173,6 +191,22 @@ export default function ProductPage(){
                                             {product.stock}
                                         </td>
 
+                                        <td className="text-center text-red-600 hover:text-red-700 cursor-pointer text-xl">
+                                            <span className="flex gap-4 justify-center">
+                                                <ProductDeleteModel product={product} refresh={
+                                                    () => {
+                                                        setProductsLoading(false);
+                                                    }
+                                                }/>
+                                                
+                                                <Link to="/admin/edit-product" state={product}>
+                                                <FaEdit className="text-blue-500 hover:text-blue-700"/>
+                                                </Link>
+                                            </span>
+                                           
+
+                                        </td>
+
                                     </tr>
 
                                 )
@@ -183,6 +217,11 @@ export default function ProductPage(){
                     </tbody>
 
                 </table>
+                : 
+                <LoadingAnimation />
+
+                }
+                
 
             </div>
 

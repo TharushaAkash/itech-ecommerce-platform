@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import ProductPage from "./admin/adminProductsPage";
 import AddProduct from "./admin/adminAddProduct";
+import AdminEditProduct from "./admin/adminEditProduct";
 
 export default function AdminPage(){
     return(
@@ -18,12 +19,13 @@ export default function AdminPage(){
             </div>
 
             {/*Dynamic Content area*/}
-            <div className="w-[calc(100%-200px)] h-full bg-primary border-[10px] border-accent rounded-2xl">
+            <div className="w-[calc(100%-200px)] h-full bg-primary border-[10px] border-accent rounded-2xl overflow-hidden">
                 <Routes>
                     <Route path="/" element={<h1>Orders Dashboard</h1>}/>
                     <Route path="/products" element={<ProductPage />}/>
                     <Route path="/add-products" element={<AddProduct />} />
                     <Route path="/users" element={<h1>Users Dashboard</h1>}/>
+                    <Route path="/edit-product" element={<AdminEditProduct />}/>
                 </Routes>
 
             </div>
