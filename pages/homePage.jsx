@@ -8,7 +8,7 @@ export default function HomePage(){
          <div className= 'w-full h-screen flex flex-col'>
             <Header />
 
-            <div className="w-full min-h-[calc(100%-100px)] overflow-y-scroll border-2 border-black">
+            <div className="w-full min-h-[calc(100%-100px)] overflow-y-scroll">
                 <Routes>
                     <Route path="/" element={<h1>welcome to computer store</h1>}></Route>
                     <Route path="/products" element={<ProductsPage />}></Route>

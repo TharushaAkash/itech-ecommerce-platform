@@ -9,6 +9,12 @@ import { Link } from "react-router-dom";
 import { TbError404 } from "react-icons/tb";
 import ImageSlideShow from "../src/components/imageSlideShow";
 import priceFormat from "../src/utils/priceFormat";
+import { FaCartShopping } from "react-icons/fa6";
+import { BsLightningCharge } from "react-icons/bs";
+import { TbTruckDelivery } from "react-icons/tb";
+import { FaShieldAlt } from "react-icons/fa";
+import { MdShoppingCartCheckout } from "react-icons/md";
+import { GiReturnArrow } from "react-icons/gi";
 
 export default function OverviewPage(){
     const parameters  = useParams();
@@ -38,7 +44,7 @@ export default function OverviewPage(){
     )
 
     return(
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full min-h-screen flex justify-center items-center bg-gray-100 p-5">
             {
                 status === "loading" &&
                 <LoadingAnimation />
@@ -58,9 +64,25 @@ export default function OverviewPage(){
             }
 
             {
-                status == "success" && <div className="w-full h-full flex">
+                status == "success" && <div className="w-full">
+                    {/* breadCumb */}
+                    <div className="flex items-center gap-2 mb-5">
+                        <Link to="/" className="hover:text-accent transition-colors duration-100">Home</Link>
+                        <span>/</span>
+
+                        <Link to="/products" className="hover:text-accent transition-colors duration-100">products</Link>
+                        <span>/</span>
+                        <span>{product.category}</span>
+                        <span>/</span>
+                        <span className="font-semibold">{product.name}</span>
+                    </div>
+                
+                
+                
+                {/* // Main Container */}
+                <div className="w-full h-full flex bg-white rounded-3xl shadow-lg p-6 gap-10">
                     {/* Left Side */}
-                    <div className="w-1/2 h-full flex justify-center items-center">
+                    <div className="w-1/2 h-full flex justify-center items-center bg-gray-50 rounded-2xl p-5 border">
                         <ImageSlideShow  images={product.images}/>
                     </div>
 
@@ -72,58 +94,97 @@ export default function OverviewPage(){
                             {product.altNames.map(
                                 (name, index) => {
                                     return(
-                                        <span key={index} className="text-xl text-gray-500 font-bold">| {name}</span>
+                                        <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600 mr-2">{name}</span>
                                     )
                                 }
                             )}
                         </span>
 
-                        <h2 className="text-sm text-gray-500 m">{product.productId}</h2>
+                        <h2 className="text-sm text-gray-500 m">Product Code: {product.productId}</h2>
                         {/* Price section */}
                         <div className="w-full mt-5 flex flex-col">
-                            <p className="text-3xl text-accent font-bold">
+                            <p className="text-4xl text-accent font-bold">
                             {
                                 priceFormat(product.price)
                             }
                             </p>
 
                             {
-                                product.labeledPrice > product.price &&
+                                product.labeledPrice > product.price && <div  className="flex gap-4 items-center">
                                 <span className="text-xl text-gray-500 line-through">
                                     {priceFormat(product.labeledPrice)}
                                 </span>
+                                <span className="bg-green-100 text-green-700 font-semibold rounded-lg px-2 py-1">Save: {priceFormat(product.labeledPrice - product.price)}</span>
+                                </div>
                             }
                         </div>
 
                         {/* Brand and Model */}
-                        <div className="flex mt-5">
-                            <div className="bg-green-500/50 px-2 rounded-lg">
+                        <div className="flex flex-wrap mt-8">
+                            <div className="bg-gray-100 px-2 py-2 rounded-lg">
                                 <span className="text-lg font-bold">Model:</span>
                                 <span className="text-lg ml-2 text-gray-500 font-semibold">{product.model}</span>
                             </div>
-                            <div className="bg-green-500/50 px-2 rounded-lg ml-5">
-                            <span className="text-lg font-semibold ml-5">Category: </span>
+                            <div className="bg-gray-100 px-2 py-2 rounded-lg ml-5">
+                            <span className="text-lg font-bold ml-5">Category: </span>
                             <span className="text-lg text-gray-500 font-semibold">{product.category}</span>
                             </div>
                         </div>
 
 
                         {/* Discription */}
-                        <p className="text-lg mt-5">{product.description}</p>
-                        <div className="flex mt-5 gap-5">
-                        <button className="w-62.5 h-16 bg-green-500 text-white font-semibold rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">Add to Cart</button>
-                        <button className="w-62.5 h-16 bg-blue-500 text-white font-semibold rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300">Buy Now</button>
-                        <button ></button>
+                        <p className="text-lg mt-8 text-gray-800 leading">{product.description}</p>
+
+                        {/* Features */}
+                        <div className="mt-8 grid grid-cols-2 gap-4 mb-5">
+                            <div className="flex gap-3 items-start">
+                                <TbTruckDelivery className="text-accent text-3xl"/>
+                                <div>
+                                    <h1 className="font-bold text-accent text-lg">Delivery</h1>
+                                    <p className="text-gray-700">Fast island wide delivery</p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 items-start">
+                                <FaShieldAlt className="text-3xl text-accent" />
+                                <div>
+                                    <h1 className="font-bold text-lg text-accent">Warrenty</h1>
+                                    <p className="text-gray-700">1 Year Official Warrenty</p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 items-start">
+                                <MdShoppingCartCheckout  className="text-accent text-3xl"/>
+                                <div>
+                                    <h1 className="font-bold text-accent text-lg">Secure Checkout</h1>
+                                    <p className="text-gray-700">100% secure payment</p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 items-start">
+                                <GiReturnArrow className="text-accent text-3xl"/>
+                                <div>
+                                    <h1 className="font-bold text-accent text-lg">Returns</h1>
+                                    <p className="text-gray-700">7 days easy returns</p>
+                                </div>
+
+                            </div>
+                            
+                            
                         </div>
 
-
-
-
-
+                        {/* buttons */}
+                        <div className="flex mt-9 gap-5">
+                            <button className="flex justify-center items-center gap-5 w-62.5 h-13 bg-green-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
+                                <FaCartShopping className="text-2xl" />
+                                Add to Cart</button>
+                            <button className=" flex justify-center items-center gap-4 w-62.5 h-13 bg-blue-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300">
+                                <BsLightningCharge className="text-2xl" />
+                                Buy Now</button>
+                        </div>
                     </div>
 
-
-
+                </div>
                 </div>
                 
 
