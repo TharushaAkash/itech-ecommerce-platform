@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaCartShopping } from "react-icons/fa6";
 
 export default function Header (){
     return(
@@ -20,6 +21,9 @@ export default function Header (){
                     Contact Us
                 </Link>
             </div>
+            <Link to="/cart" className="w-[50px] h-[50px]  absolute right-10 flex justify-center items-center">
+                <FaCartShopping className="text-2xl text-white"/>
+            </Link>
 
          </header>
     )

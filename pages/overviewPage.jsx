@@ -15,6 +15,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaShieldAlt } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { GiReturnArrow } from "react-icons/gi";
+import { addToCart, getCart } from "../src/utils/cart";
 
 export default function OverviewPage(){
     const parameters  = useParams();
@@ -175,10 +176,14 @@ export default function OverviewPage(){
 
                         {/* buttons */}
                         <div className="flex mt-9 gap-5">
-                            <button className="flex justify-center items-center gap-5 w-62.5 h-13 bg-green-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
+                            <button
+                                onClick={() => {addToCart(product, 1); toast.success("Added to cart")}} 
+                                className="flex justify-center items-center gap-5 w-62.5 h-13 bg-green-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
                                 <FaCartShopping className="text-2xl" />
                                 Add to Cart</button>
-                            <button className=" flex justify-center items-center gap-4 w-62.5 h-13 bg-blue-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300">
+                            <button
+                                onClick={() => {console.log(getCart())}} 
+                                className=" flex justify-center items-center gap-4 w-62.5 h-13 bg-blue-500 text-lg text-white font-semibold rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300">
                                 <BsLightningCharge className="text-2xl" />
                                 Buy Now</button>
                         </div>
