@@ -1,5 +1,7 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+
+
 export default async function createOrder(req, res) {
     const user = req.user;
     if (!user) {
@@ -76,6 +78,56 @@ export default async function createOrder(req, res) {
         console.log(err.message);
         res.status(500).json({
             message: "An error occurred while placing the order"
+        })
+    }
+}
+
+
+//Getter method for products
+export async function getOrders(req, res){
+    try{
+        if(req.user == null){
+            res.status(401).json({
+                message: "You need to be logged in to view your orders"
+            })
+            return;
+        }
+
+        const pageSize = parseInt(req.params.pageSize || "10")
+        const pageNumber = parseInt(req.params.pageNumber || "1")
+
+        if(req.user.isAdmin){
+
+            const orderCount = await Order.countDocuments(); //Get how many orders in the data base
+
+            //Calculate the pages
+            const totalPages = Math.ceil(orderCount / pageSize); //Round up to the nearest integer by Math.ceil
+            const orders = (await Order.find().sort({date: -1}).skip((pageNumber - 1) * pageSize).limit(pageSize));
+            res.status(200).json({
+                totalPages: totalPages,
+                pageSize: pageSize,
+                orderCount: orderCount,
+                orders: orders,
+                message: "Orders fetched successfully"
+            })
+
+        }else{
+            const orderCount = await Order.countDocuments({email: req.user.email}); //Get how many orders the user has placed
+            const totalPages = Math.ceil(orderCount / pageSize)
+            const orders = await Order.find({email: req.user.email}).sort({date: -1}).skip((pageNumber - 1) * pageSize).limit(pageSize);
+            res.status(200).json({
+                totalPages: totalPages,
+                orders: orders,
+                pageSize: pageSize,
+                orderCount: orderCount,
+                message: "Orders fetched successfully"
+            })
+        }
+
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json({
+            message: "An error occurred while fetching the orders"
         })
     }
 }
