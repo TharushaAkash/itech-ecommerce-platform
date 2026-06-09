@@ -8,6 +8,7 @@ import jwt, { decode } from 'jsonwebtoken';
 import authenticateUser from './middlewares/authenticate.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import OrderRouter from './routers/orderRouter.js';
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -30,6 +31,7 @@ app.use(authenticateUser);
 
 app.use("/api/students" , studentRouter);  //localhost:3000/students
 app.use("/api/products", productRouter);
+app.use("/api/orders", OrderRouter);
 app.use("/api/users", userRouter);
 
 
