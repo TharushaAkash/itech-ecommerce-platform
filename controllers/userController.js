@@ -81,7 +81,8 @@ export async function loginUser(req, res){
                     lastName: user.lastName,
                     isAdmin: user.isAdmin,
                     isBlocked: user.isBlocked,
-                    isEmailVerified: user.isEmailVerified
+                    isEmailVerified: user.isEmailVerified,
+                    image: user.image
                 }
 
                 const token = jwt.sign(payload, process.env.JWT_SECRET_KEY , {expiresIn: "1h"});
@@ -115,6 +116,11 @@ export async function loginUser(req, res){
 
 //Update password
 export async function updatePassword(req,res){
+    if(req.user == null){
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+    }
     try{
         const email = req.body.email;
         const newPassword = req.body.password;
@@ -147,6 +153,59 @@ export async function updatePassword(req,res){
                 message: "Error updating password"
             }
         )
+    }
+}
+
+export async function getUserData(req, res){
+    if(req.user == null){
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+    }else{
+        console.log(req.user)
+        res.json({
+            user: req.user,
+            image: req.user.image
+        })
+    }
+}
+
+
+export async function updateUserData(req,res){
+    if(req.user == null){
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+    }else{
+        try{
+            await User.findOneAndUpdate(
+                {email: req.user.email},
+                {firstName: req.body.firstName, lastName: req.body.lastName, image: req.body.image}
+            )
+            const updatedUser = await User.findOne({email: req.user.email})
+            const token = jwt.sign(
+                {
+                    email: updatedUser.email,
+                    firstName: updatedUser.firstName,
+                    lastName: updatedUser.lastName,
+                    isAdmin: updatedUser.isAdmin,
+                    isBlocked: updatedUser.isBlocked,
+                    isEmailVerified: updatedUser.isEmailVerified,
+                    image: updatedUser.image
+                },
+                process.env.JWT_SECRET_KEY,
+                {expiresIn : "48h"}
+            )
+            res.json({
+                message: "User data updated successfully",
+                token: token
+            })
+        }catch(err){
+            res.status(500).json({
+                message: "Error updating user data"
+            })
+        }
+
     }
 }
 

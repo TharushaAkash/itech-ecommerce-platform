@@ -131,3 +131,38 @@ export async function getOrders(req, res){
         })
     }
 }
+
+export async function updateStatusAndNotes(req, res){
+    if(req.user == null || !req.user.isAdmin){
+        res.status(401).json(
+            {
+                message: "Admins can do this operation.."
+            }
+        )
+        return;
+    }
+
+    try{
+        const status = req.body.status
+        const notes = req.body.notes
+        const orderId = req.params.orderId
+        const response = await Order.findOneAndUpdate(
+            {orderId: orderId},
+            {status: status, notes: notes}
+
+        )
+        res.status(200).json(
+            {
+                message: "Order status and notes updated successfully"
+            }
+        )
+
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json(
+            {
+                message: "Internal Server Error.."
+            }
+        )
+    }
+}
