@@ -1,6 +1,8 @@
+import axios from "axios";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { response } from "express";
 
 
 
@@ -206,6 +208,77 @@ export async function updateUserData(req,res){
             })
         }
 
+    }
+}
+
+export async function googleLogin(req, res){
+    const accessToken = req.body.token;
+    console.log(accessToken);
+
+    //Google validation
+    try{
+        const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers : {
+                Authorization: `Bearer ${accessToken}`
+            
+            }
+        })
+        console.log(response.data);
+        const user = await User.findOne({email: response.data.email})
+
+        if(user == null){
+            //Create new account
+            const newUser = new User({
+                email: response.data.email,
+                firstName: response.data.given_name,
+                lastName: response.data.family_name,
+                password: "google-login",
+                isEmailVerified: true,
+                image: response.data.picture
+            })
+
+            await newUser.save();
+
+            const token = jwt.sign(
+                {
+                    email: newUser.email,
+                    firstName: newUser.firstName,
+                    lastName: newUser.lastName,
+                    isAdmin: false,
+                    isBlocked: false,
+                    isEmailVerified: newUser.isEmailVerified,
+                    image: newUser.image
+                },
+                process.env.JWT_SECRET_KEY,
+                {expiresIn : "48h"}
+            )
+            res.json({
+                message: "User data Created successfully",
+                token: token
+            })
+
+        }else{
+            //Generate our token
+             const token = jwt.sign(
+                {
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    isAdmin: user.isAdmin,
+                    isBlocked: user.isBlocked,
+                    isEmailVerified: user.isEmailVerified,
+                    image: user.image
+                },
+                process.env.JWT_SECRET_KEY,
+                {expiresIn : "48h"}
+            )
+            res.json({
+                message: "User login successfully",
+                token: token
+            })
+        }
+    }catch(err){
+        console.log(err.message);
     }
 }
 
