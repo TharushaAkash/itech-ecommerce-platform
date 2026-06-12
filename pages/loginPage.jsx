@@ -2,12 +2,48 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from "react-icons/fc";
+import { FaHandPeace } from "react-icons/fa";
+import api from "../src/utils/api";
+
+
 
 export default function LoginPage(){
 
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-    const navigate =useNavigate()
+    const navigate =useNavigate();
+
+    const googleLogin = useGoogleLogin(
+        {
+            onSuccess: (response) => {
+                api.post("/users/google-login",{
+                    token : response.access_token
+                }).then((response)=>{
+                    localStorage.setItem("token", response.data.token);
+                    toast.success("Login Successfull")
+
+                    if(response.data.isAdmin){
+                        //Redirect to admin dashboard
+                        //window.location.href = "/admin"; this method will cause a full page reload, we can use react router for better user experience
+                        navigate("/admin");
+                    }else{
+                        //Redirect to home page
+                        //window.location.href = "/";
+                        navigate("/");
+                    }
+
+                }).catch(()=>{
+                    toast.error("Google login failed")
+                })
+                console.log(response)
+            },
+            onError: (error)=>{
+                toast.error("Google login failed")
+            }
+        }
+    )
 
     async function handleLogin(){
         console.log("Email: ", email);
@@ -43,42 +79,115 @@ export default function LoginPage(){
     }
     }
 
-    return(
-        <div className="w-full h-screen flex justify-center items-center bg-[url('/login-bg.jpg')] bg-cover">
-            <div className="w-0 lg:w-1/2 h-full">
+    return (
+  <div className="min-h-screen flex bg-[url('/login-bg.jpg')] bg-cover bg-center">
+    
+    {/* Left Side */}
+    <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-black/30 backdrop-blur-sm">
+      <div className="text-white text-center px-10">
+        <h1 className="text-5xl flex font-bold mb-4">
+          Welcome Back
+          <span className="text-yellow-500 ml-5"><FaHandPeace /></span>
+        </h1>
+        
+        <p className="text-lg text-gray-200">
+          Sign in to continue shopping and manage your account.
+        </p>
+      </div>
+    </div>
 
-            </div>
+    {/* Right Side */}
+    <div className="w-full lg:w-1/2 flex items-center justify-center p-5">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8">
 
-            <div className="w-screen lg:w-1/2 h-full flex justify-center items-center">
-            {/* login box */}
-            <div className="w-[90%] h-[500px] backdrop-blur-lg rounded-xl shadow-2xl flex flex-col justify-center items-center text-white">
-
-                <h1 className="text-3xl font-bold mb-8 text-white">Sign In</h1>
-                <input onChange={(e) => {
-                    setEmail(e.target.value)
-                }}
-                 value={email} 
-                type="email" 
-                placeholder="Email" 
-                className="w-3/4 mb-6 p-3 rounded-lg border border-second focus:outline-none focus:ring-2 focus:ring-accent"></input>
-
-                <input onChange={(e) => {
-                    setPassword(e.target.value)
-                }}  
-                value={password}
-                type="password" 
-                placeholder="password" 
-                className="w-3/4 p-3 rounded-lg border border-second focus:outline-none focus:ring-2 focus:ring-accent"></input>
-
-                <p className="mt-4 mb-4 text-right w-3/4 text-gray-400">Forget Password? <Link to="/forgot-password" className="text-blue-800 hover:underline">Click here</Link></p>
-                <button 
-                onClick={handleLogin}
-                className="w-2/4 bg-accent  p-3 rounded-2xl font-bold text-xl cursor-pointer hover:bg-second">Sign In</button>
-                <p className="mt-4 text-gray-400">Already have an account? <Link to="/register" className="text-blue-800 hover:underline">Register</Link></p>
-
-            </div>
-
-            </div>
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold text-white">
+            Sign In
+          </h2>
+          <p className="text-gray-300 mt-2">
+            Enter your credentials to continue
+          </p>
         </div>
-    )
+
+        {/* Email */}
+        <div className="mb-5">
+          <label className="text-white text-sm mb-2 block">
+            Email Address
+          </label>
+
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="john@example.com"
+            className="w-full p-3 rounded-xl bg-white/20 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-3">
+          <label className="text-white text-sm mb-2 block">
+            Password
+          </label>
+
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="w-full p-3 rounded-xl bg-white/20 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
+        {/* Forgot Password */}
+        <div className="flex justify-end mb-6">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-blue-300 hover:text-blue-200"
+          >
+            Forgot Password?
+          </Link>
+        </div>
+
+        {/* Login Button */}
+        <button
+          onClick={handleLogin}
+          className="w-full bg-accent hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+        >
+          Sign In
+        </button>
+
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 h-px bg-white/20"></div>
+          <span className="px-4 text-gray-300 text-sm">
+            OR
+          </span>
+          <div className="flex-1 h-px bg-white/20"></div>
+        </div>
+
+        {/* Google Login */}
+        <button
+          onClick={() => googleLogin()}
+          className="w-full flex items-center justify-center gap-3 bg-white py-3 rounded-xl font-medium text-gray-700 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+        >
+          <FcGoogle className="text-2xl" />
+          Continue with Google
+        </button>
+
+        {/* Register */}
+        <p className="text-center mt-6 text-gray-300">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-300 hover:text-blue-200 font-semibold"
+          >
+            Register
+          </Link>
+        </p>
+
+      </div>
+    </div>
+  </div>
+);
 }
