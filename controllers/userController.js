@@ -1,10 +1,24 @@
 import axios from "axios";
 import User from "../models/user.js";
+import Otp from "../models/otp.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { response } from "express";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.GMAIL,
+        pass: process.env.GMAIL_APP_PASSWORD
+    }
+})
 
 //Create user
 export async function createUser(req, res){
@@ -282,6 +296,120 @@ export async function googleLogin(req, res){
     }
 }
 
+export async function sendOtp(req, res){
+    const email = req.body.email;
+
+    try{
+        const user = await User.findOne({email: email});
+        if(user == null){
+            res.status(404).json({
+                message: "User not found"
+            })
+            return;
+        }
+        await Otp.deleteOne({email: email});
+
+        const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const newOtp = new Otp({
+            email: email,
+            otp: otpCode
+        })
+
+        await newOtp.save();
+
+        //send email
+        const message = {
+            from: process.env.GMAIL,
+            to: email,
+            subject: "Password Reset OTP - I Computers",
+            html: `<div style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
+                        <h2>Your Verification Code</h2>
+                        <p>Use the OTP below to verify your account:</p>
+                        <div style="
+                            font-size: 32px;
+                            font-weight: bold;
+                            letter-spacing: 5px;
+                            background: #f4f4f4;
+                            padding: 15px;
+                            border-radius: 8px;
+                            display: inline-block;
+                            margin: 10px 0;
+                        ">
+                            ${otpCode}
+                        </div>
+                        <p>This code will expire in 10 minutes.</p>
+                </div>
+                `
+        }
+        
+        await transporter.sendMail(message);
+        res.status(200).json({
+            message: "OTP sent successfully"
+        })
+
+
+
+
+    }catch(err){
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+export async function verifyOtpAndPassword(req, res) {
+    const email = req.body.email;
+    const otp = req.body.otp;
+    const password = req.body.password;
+
+    try{
+        const otpRecord = await Otp.findOne({email: email});
+        if(otpRecord == null){
+            res.status(404).json({
+                message: "Invalid OTP"
+            })
+            return;
+        }
+
+        if(otpRecord.otp !== otp){
+            res.status(400).json({
+                message: "Invalid OTP"
+            })
+            return;
+        }
+
+        const otpAge = (Date.now() - otpRecord.createdTime.getTime()) / (1000 * 60)  //age in minutes
+        if(otpAge > 10){
+            await Otp.deleteOne({email: email});
+            res.status(400).json({
+                message: "OTP has expired"
+            })
+            return;
+        }
+
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        await User.findOneAndUpdate({email: email}, {password: hashedPassword});
+
+        await Otp.deleteOne({email: email});
+        res.status(200).json({
+            message: "Password updated successfully"
+        })
+
+    }catch(err){
+        res.status(500).json({
+            message: err.message
+        })
+
+
+        
+
+        
+    }
+
+
+
+}
 
 //Check if user is admin
 export default function isAdmin(req){
