@@ -2,37 +2,43 @@ import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import api from "../utils/api";
 
-export default function ProductDeleteModel(props){
+export default function UserDeleteModel(props){
 
     const [showModel, setShowModel] = useState(false);
-
-    const product = props.product;
+    const token = localStorage.getItem("token");
+    const user = props.user;
+    const email = props.user.email;
     const refresh = props.refresh;
 
-    function handleDelete(){
-          
-                const token = localStorage.getItem("token");
-                axios.delete(import.meta.env.VITE_API_URL+"/products/"+product.productId,{
-                    headers: {
-                        'Authorization': "Bearer " + token
-                    }
-                }).then(
-                    (response) => {
-                        toast.success("Product deleted successfully..");
-                        refresh();
-                    }
-                ).catch(
-                    (error) => {
-                        toast.error("Error deleting product..");
-                    }
-                )
+    async function deleteUser(){
+        if(token == null){
+            toast.error("Unauthorize Access")
+            return;
+        }
+        try{
+        const response = await api.delete("/users/"+email, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+        console.log("User Deleted Successfully")
+        toast.success(response.data.message);
+        setUsersLoading(false);
+            
+        }catch(error){
+            toast.error(error.response.data.message);
+            console.log(error);
+        }
+        
+        
     }
     return(
         <>
         
         {/* pc view button */}
-        <MdDelete className="hidden lg:flextext-red-600 hover:text-red-700 cursor-pointer text-xl"
+        <MdDelete className="hidden lg:flex text-red-500 hover:text-red-700"
         onClick={
             () => {
                 setShowModel(true);
@@ -41,7 +47,7 @@ export default function ProductDeleteModel(props){
         />
 
         {/* Mobile view button */}
-        <div className="lg:hidden flex justify-center bg-red-600 px-10 py-2 rounded-lg">
+        <div className="lg:hidden flex justify-center bg-red-600 px-5 py-2 rounded-lg">
             <MdDelete className="text-white hover:text-red-700 cursor-pointer text-2xl"
         onClick={
             () => {
@@ -63,15 +69,16 @@ export default function ProductDeleteModel(props){
                    
                     {/* red box */}
                     <div className=" w-[350px] lg:w-[500px] h-[80px] bg-red-900/40 border-1 border-red-600 flex flex-col justify-center pl-3">
-                        <h1 className="text-white">Are you sure you want to delete this product? </h1>
+                        <h1 className="text-white">Are you sure you want to delete this User? </h1>
                     </div>
 
                     {/* button */}
                     <div className="w-full flex relative px-3 py-2">
                         <button
                             onClick={() => {
-                                handleDelete();
+                                deleteUser();
                                 setShowModel(false);
+                                refresh();
                             }}
                             className="bg-red-600 text-white px-10 py-2 rounded-lg  absolute right-10 hover:bg-red-700 cursor-pointer"
                             >Delete</button>

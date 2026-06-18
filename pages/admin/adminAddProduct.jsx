@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import uploadMedia from "../../src/utils/mediaUpload";
 import axios from "axios";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -84,7 +84,7 @@ export default function AddProduct(){
                 {/* Header button div */}
                 <div className="h-full flex justify-center items-center">
                     <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-400" disabled={isSaving}>{isSaving? <AiOutlineLoading3Quarters className="animate-spin"/> : "Save"}</button>
-                    <button className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Cancel</button>
+                    <Link to="/admin/products"><button className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Cancel</button></Link>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@ export default function AddProduct(){
 
             <div className="w-full flex flex-wrap bg-white p-5 mt-8 rounded-lg">
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Product Id</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full"
                     value={productId}
@@ -102,7 +102,7 @@ export default function AddProduct(){
                     />
                 </div>
 
-                <div className="w-3/4 p-2">
+                <div className="w-2/4 lg:w-3/4 p-2">
                     <label className="block mb-2 font-semibold">Name</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full" 
                     value={name}
@@ -115,7 +115,7 @@ export default function AddProduct(){
 
                 <div className="w-full p-2">
                     <label className="block mb-2 font-semibold">Alternative Names (comma separated)</label>
-                    <input className="border border-gray-300 rounded-md p-2 w-full" 
+                    <input className="border border-gray-300 rounded-md p-4 lg:p-2 w-full" 
                     value={altNames}
                     onChange={(e) => {
                         setAltNames(e.target.value);
@@ -124,7 +124,7 @@ export default function AddProduct(){
                 </div>
 
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Price</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full"
                     value={price}
@@ -134,7 +134,7 @@ export default function AddProduct(){
                     />
                 </div>
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Label Price</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full"
                     value={labeledPrice}
@@ -145,13 +145,13 @@ export default function AddProduct(){
                 </div>
 
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Category</label>
                     <select 
                     value={category}  
                     onChange={(e) => {
                         setCategory(e.target.value);
-                    }}className="border border-gray-300 rounded-md p-2 w-full m-2"
+                    }}className="border border-gray-300 rounded-md p-2 w-full"
                     
                     >
                         <option value="Laptop">Laptop</option>
@@ -164,7 +164,7 @@ export default function AddProduct(){
 
                 {/* Images */}
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Images</label>
                     <input type="file" multiple={true}
                     className="border border-gray-300 rounded-md p-2 w-full"
@@ -178,7 +178,7 @@ export default function AddProduct(){
 
                 <div className="w-full p-2">
                     <label className="block mb-2 font-semibold">Description</label>
-                    <textarea className="border border-gray-300 rounded-md p-2 w-full"
+                    <textarea className="border border-gray-300 rounded-md p-5 lg:p-2 w-full"
                     value={description}
                     onChange={(e) => {
                         setDescription(e.target.value);
@@ -186,7 +186,7 @@ export default function AddProduct(){
                     />
                 </div>
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Brand</label>
                     <select 
                     value={brand}  
@@ -208,7 +208,7 @@ export default function AddProduct(){
 
 
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Model</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full"
                     value={model}
@@ -220,7 +220,7 @@ export default function AddProduct(){
 
 
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Stock</label>
                     <input className="border border-gray-300 rounded-md p-2 w-full"
                     value={stock}
@@ -231,7 +231,7 @@ export default function AddProduct(){
                 </div>
 
 
-                <div className="w-1/4 p-2">
+                <div className="w-2/4 lg:w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Available</label>
                     <select className="border border-gray-300 rounded-md p-2 w-full"
                     value={isAvailable}

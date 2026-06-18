@@ -1,9 +1,9 @@
 import { Link, Links } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
+import { FaPhone, FaPlus, FaRegUser } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEmail } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import LoadingAnimation from "../src/components/loadingAnimation";
@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import priceFormat from "../src/utils/priceFormat";
 import OrderDataModel from "../src/components/orderDataModel";
 import CustomerOrderDetailsModel from "../src/components/customerOrderDetailsModal";
+import { SlCalender } from "react-icons/sl";
+import { LuClipboardList } from "react-icons/lu";
 
 export default function CustomerOrdersPage(){
 
@@ -77,7 +79,7 @@ export default function CustomerOrdersPage(){
 
 
         {/* Table Container */}
-        <div className="mt-8 bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+        <div className=" hidden lg:flex mt-8 bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
 
             <div className="overflow-x-auto">
 
@@ -192,7 +194,47 @@ export default function CustomerOrdersPage(){
             
 
         </div>
-        <div className="w-full flex justify-end items-center gap-3 mt-4">
+
+        {/* Mobile View */}
+        
+                <div className="lg:hidden flex flex-col mt-8 gap-4">
+                    {
+                        ordersLoading ?
+                        <>
+                            {
+                                orders.map((order, index)=>{
+                                    return(
+                                        <div key={index} className="w-full bg-white rounded-lg shadow-lg flex flex-col px-5 py-2">
+                                            
+                                            <div className="flex flex-col gap-2">
+                                                <div className="justify-between flex items-center">
+                                                    <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold text-xl p-2"><LuClipboardList /></span>#{order.orderId}</h1>
+                                                    <h1 className={`${order.status=== "Pending" ? "bg-yellow-200 border border-yellow-700 text-yellow-700" : order.status === "Processing" ? "bg-blue-200 border border-blue-600 text-blue-700" : order.status === "Shipped" ? "bg-green-200 border border-green-700 text-green-70" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>{order.status}</h1>
+                                                </div>
+                                                <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><FaRegUser /></span>{order.firstName} {order.lastName}</h1>
+                                                <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><MdEmail /></span>{order.email}</h1>
+                                                <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><FaPhone /></span>{order.phone}</h1>
+                                                <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><SlCalender /></span>{new Date(order.date).toLocaleDateString()}</h1>
+                                                <div className="flex items-center justify-between w-full mb-3">
+                                                    <h1 className="text-blue-700 text-2xl font-bold">{priceFormat(order.total)}</h1>
+                                                    <CustomerOrderDetailsModel order={order} refresh={()=>setOrdersLoading(false)}/>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    )
+                                })
+                            }
+                        </>
+        
+                        :
+                        <LoadingAnimation />
+                    }
+        
+                </div>
+        
+                
+        <div className="w-full flex justify-end items-center gap-3 mt-8 mb-30">
                     <button className="px-3 py-1 bg-gray-400 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 cursor-pointer"
                         onClick={
                             () => {

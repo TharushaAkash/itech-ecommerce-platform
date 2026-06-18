@@ -1,14 +1,16 @@
 import { Link, Links } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
+import { FaPhone, FaPlus, FaRegUser } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEmail } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import LoadingAnimation from "../../src/components/loadingAnimation";
 import ProductDeleteModel from "../../src/components/productDeleteModel";
 import { useNavigate } from "react-router-dom";
+import { LuClipboardList } from "react-icons/lu";
+import { SlCalender } from "react-icons/sl";
 
 export default function ProductPage(){
 
@@ -72,7 +74,7 @@ export default function ProductPage(){
 
 
         {/* Table Container */}
-        <div className="mt-8 bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+        <div className="hidden lg:flex mt-8 bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
 
             <div className="overflow-x-auto">
 
@@ -226,6 +228,58 @@ export default function ProductPage(){
             </div>
 
         </div>
+
+         {/* Mobile View */}
+        
+                <div className="lg:hidden flex flex-col mt-8 gap-4">
+                    {
+                        productsLoading ?
+                        <>
+                            {
+                                products.map((product, index)=>{
+                                    return(
+                                        <div key={index} className="w-full bg-white rounded-lg shadow-lg flex flex-col px-5 py-2">
+                                            <div>
+                                                <img src={product.images[0]} alt={product.name} className="w-full rounded-xl object-cover"/>
+                                            </div>
+                                            
+                                            <div className="flex flex-col gap-2">
+                                                <div className="justify-between flex items-center">
+                                                    <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold text-xl py-2 px-3"><LuClipboardList /></span>{product.productId}  -  {product.brand}</h1>
+                                                    {/* <h1 className={`${product.isAvailable ? "bg-yellow-200 border : bg-accent text-accent" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>{product.isAvailable ? "Available" : "Out of Stock"}</h1> */}
+                                                </div>
+                                                <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold bg-gray-200 rounded-lg py-2 px-3">Category:</span>{product.category}</h1>
+                                                <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold bg-gray-200 rounded-lg py-2 px-3">Model:</span>{product.model}</h1>
+                                                <span className={` w-[100px] rounded-2xl flex justify-center py-2 font-bold ${product.isAvailable ? "bg-green-200 border-2 border-green-500 text-accent" : "bg-red-500 text-white border-2 border-red-500" }`}>{product.isAvailable ? "Available" : "Out of Stock"}</span>
+                                                <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold bg-gray-200 rounded-lg py-2 px-3">Stock</span>{product.stock}</h1>
+                                                <div className="flex items-center justify-between w-full mb-3">
+                                                    <h1 className="text-blue-700 text-2xl font-bold">{}</h1>
+                                    
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-center gap-5 mb-5">
+                                                <ProductDeleteModel product={product} refresh={
+                                                    () => {
+                                                        setProductsLoading(false);
+                                                    }
+                                                }/>
+                                                <Link to="/admin/edit-product" state={product}>
+                                                <button className="bg-blue-500 px-10 rounded-lg py-2"><FaEdit className="text-white font-bold text-2xl"/></button>
+                                                </Link>
+
+                                            </div>
+        
+                                        </div>
+                                    )
+                                })
+                            }
+                        </>
+        
+                        :
+                        <LoadingAnimation />
+                    }
+        
+                </div>
 
         {/* Floating Add Button */}
         <Link

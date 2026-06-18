@@ -18,9 +18,9 @@ export default function Header (){
                     Products
                 </Link>
 
-                <Link to="/contact-us" className=" text-white font-semibold">
+                <a href="#footer" className=" text-white font-semibold">
                     Contact Us
-                </Link>
+                </a>
             </div>
             <div className="w-50px h-50px hidden absolute right-30 lg:flex justify-center items-center">
                 <UserData />

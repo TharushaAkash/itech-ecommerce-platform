@@ -9,15 +9,17 @@ import SettingsPage from "./settingsPage";
 import TestPage from "./test";
 import BottomNavigationBar from "../src/components/bottomNavigationBar";
 import NotFoundPage from "./notFoundPage";
+import LandingPage from "./landingPage";
 
 export default function HomePage(){
     return(
          <div className= 'w-full h-screen flex flex-col'>
             <Header />
 
-            <div className="w-full min-h-[calc(100%-100px)] overflow-y-scroll">
+            <div className="w-full min-h-[calc(100%-100px)] overflow-y-auto">
+                
                 <Routes>
-                    <Route path="/" element={<h1>welcome to computer store</h1>}></Route>
+                    <Route path="/" element={<LandingPage />}></Route>
                     <Route path="/products" element={<ProductsPage />}></Route>
                     <Route path="/contact-us" element={<h1>Contact Us Page</h1>}></Route>
                     <Route path="/overview/:productId" element={<OverviewPage />}></Route>

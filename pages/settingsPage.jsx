@@ -93,7 +93,7 @@ export default function SettingsPage(){
             }
         }
     return(
-        <div className="w-full h-full flex items-center justify-center gap-6">
+        <div className="w-full h-full flex flex-col items-center lg:flex-row gap-4 mt-4 lg:justify-center">
 
             {
                 user ?

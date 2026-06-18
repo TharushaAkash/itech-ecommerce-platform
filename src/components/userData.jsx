@@ -39,6 +39,8 @@ export default function UserData() {
                             } else if (e.target.value === "option4") {
                                 localStorage.removeItem("token")
                                 navigate("/login")
+                            }else if (e.target.value === "option5") {
+                                navigate("/admin");
                             }
                             e.target.value = "option1"
                         }}>
@@ -46,6 +48,7 @@ export default function UserData() {
                             <option value="option2" className="bg-second text-white">My Order</option>
                             <option value="option3" className="bg-second text-white">Settings</option>
                             <option value="option4" className="bg-second text-white">Logout</option>
+                            {user.user.isAdmin && <option value="option5" className="bg-second text-white">Admin-Home</option>}
                         </select>
                     </div>
                 ) : (
