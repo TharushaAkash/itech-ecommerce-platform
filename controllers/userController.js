@@ -60,7 +60,7 @@ export async function createUser(req, res){
             }
         )
     }catch(err){
-        console.log(err.message),
+        console.log(err.message);
         res.status(500).json(
             {
                 message: "Error creating User"
@@ -78,11 +78,21 @@ export async function loginUser(req, res){
         const password = req.body.password;
 
         const user = await User.findOne({email: email})
+        console.log(user.isBlocked)
 
         if(!user){  //if(user == null)
             res.status(404).json(
                 {
                     message: "User not found"
+                }
+            )
+            return;
+        }
+        
+        if(user.isBlocked){
+            res.status(403).json(
+                {
+                    message: "User is blocked"
                 }
             )
             return;
@@ -188,6 +198,7 @@ export async function getUserData(req, res){
 
 
 export async function updateUserData(req,res){
+    console.log(req.user);
     if(req.user == null){
         res.status(401).json({
             message: "Unauthorized"
@@ -222,6 +233,43 @@ export async function updateUserData(req,res){
             })
         }
 
+    }
+}
+
+
+export async function userBlock(req,res){
+    if(req.user == null){
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+        return;
+    }
+
+    try{
+        const email = req.body.email;
+        const isBlocked = req.body.isBlocked;
+
+        const user = await User.findOne({email: email});
+        if(user == null){
+            res.status(404).json({
+                message: "User not found"
+            })
+            return;
+        }
+
+        const response = await User.findOneAndUpdate(
+            {email: email},
+            {isBlocked: isBlocked}
+        )
+        res.status(200).json({
+            message: "User blocked successfully"
+        })
+
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json({
+            message: "Error blocking user"
+        })
     }
 }
 
@@ -401,14 +449,67 @@ export async function verifyOtpAndPassword(req, res) {
             message: err.message
         })
 
-
-        
-
         
     }
 
+}
 
+//Get all users
+export async function getAllUsers(req, res){
+    try{
+        if(req.user == null || !req.user.isAdmin){
+            res.status(401).json(
+                {
+                    message: "Unauthorized User, Please login to create user"
+                }
+            )
+            return;
+        }
 
+        const users = await User.find();
+        res.status(200).json(
+            {
+                users: users
+            }
+        )
+    }catch(err){
+        res.status(500).json(
+            {
+                message: "Error getting users"
+            }
+        )
+    }  
+}
+
+export async function deleteUser(req,res){
+
+    const email = req.params.email;
+    try{
+        if(req.user == null || !req.user.isAdmin){
+            res.status(401).json({
+                message: "Unauthorized Access"
+            })
+            return;
+        }
+
+        const user = await User.findOne({email: email})
+        if(user == null){
+            res.status(404).json({
+                message: "User not found"
+            })
+            return;
+        }
+        await User.deleteOne({email: email})
+        console.log("User deleted successfully");
+        res.status(200).json({
+            message: "User deleted successfully"
+        });
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json({
+            message: "Error deleting user"
+        });
+    }
 }
 
 //Check if user is admin
