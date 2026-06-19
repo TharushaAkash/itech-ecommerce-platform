@@ -314,7 +314,7 @@ export default function LandingPage(){
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-white font-bold">Contact Us</h3>
                                 <div className="flex flex-col gap-3 text-sm">
-                                    <p className="flex gap-2 items-center"><MdOutlineAttachEmail /> support@i-computers.com</p>
+                                    <p className="flex gap-2 items-center"><MdOutlineAttachEmail /> support@tech-solutions.com</p>
                                     <p className="flex gap-2 items-center"><FaPhone/> +94 78 665 8978</p>
                                     <p className="flex gap-2 items-center"><FaLocationDot />No.111/3, P.B.Wijesundara Mawatha, Colombo.</p>
                                 </div>
@@ -332,7 +332,7 @@ export default function LandingPage(){
                             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
                         </div>
-                        <p className="text-gray-500 text-xs">© 2026 i-Computers. All rights reserved.</p>
+                        <p className="text-gray-500 text-xs">© 2026 Tech Solutions. All rights reserved.</p>
                     </div>
                 </footer>
 
