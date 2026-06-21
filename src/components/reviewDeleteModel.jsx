@@ -4,57 +4,41 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import api from "../utils/api";
 
-export default function UserDeleteModel(props){
+export default function ReviewDeleteModel(props){
 
     const [showModel, setShowModel] = useState(false);
     const token = localStorage.getItem("token");
-    const user = props.user;
-    const email = props.user.email;
     const refresh = props.refresh;
+    const {orderId} = props;
 
-    async function deleteUser(){
-        if(token == null){
-            toast.error("Unauthorize Access")
-            return;
-        }
+    async function deleteReview(){
         try{
-        const response = await api.delete("/users/"+email, {
-            headers: {
-                "Authorization": "Bearer " + token
+            if(token == null){
+                navigate("/login");
+                return;
             }
-        })
-        console.log("User Deleted Successfully")
-        toast.success(response.data.message);
-            
-        }catch(error){
-            toast.error(error.response.data.message);
-            console.log(error);
+
+            const response = await api.delete("/feedback/"+orderId,{
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            })
+
+            toast.success(response.data.message)
+        
+
+        }catch(err){
+            toast.error(err.message)
         }
-        
-        
+
     }
     return(
         <>
         
         {/* pc view button */}
-        <MdDelete className="hidden lg:flex text-red-500 hover:text-red-700"
-        onClick={
-            () => {
-                setShowModel(true);
-            }
-        }
-        />
-
-        {/* Mobile view button */}
-        <div className="lg:hidden flex justify-center bg-red-600 px-5 py-2 rounded-lg">
-            <MdDelete className="text-white hover:text-red-700 cursor-pointer text-2xl"
-        onClick={
-            () => {
-                setShowModel(true);
-            }
-        }
-        />
-        </div>
+        <button className="bg-red-600 w-full rounded-lg text-white font-semibold py-2 hover:bg-transparent hover:text-red-600 hover:border-2 hover:border-red-600 transition-colors duration-200 onCl" 
+        onClick={()=>{setShowModel(true)}}
+        >Delete</button>
         
 
 
@@ -68,14 +52,14 @@ export default function UserDeleteModel(props){
                    
                     {/* red box */}
                     <div className=" w-[350px] lg:w-[500px] h-[80px] bg-red-900/40 border-1 border-red-600 flex flex-col justify-center pl-3">
-                        <h1 className="text-white">Are you sure you want to delete this User? </h1>
+                        <h1 className="text-white">Are you sure you want to delete this Review ? </h1>
                     </div>
 
                     {/* button */}
                     <div className="w-full flex relative px-3 py-2">
                         <button
                             onClick={() => {
-                                deleteUser();
+                                deleteReview();
                                 setShowModel(false);
                                 refresh();
                             }}

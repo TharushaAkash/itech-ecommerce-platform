@@ -45,7 +45,7 @@ export default function UserData() {
                             e.target.value = "option1"
                         }}>
                             <option value="option1" className="bg-second text-white">{user.user.firstName}</option>
-                            <option value="option2" className="bg-second text-white">My Order</option>
+                            {!user.user.isAdmin && <option value="option2" className="bg-second text-white">My Orders</option>}
                             <option value="option3" className="bg-second text-white">Settings</option>
                             <option value="option4" className="bg-second text-white">Logout</option>
                             {user.user.isAdmin && <option value="option5" className="bg-second text-white">Admin-Home</option>}
@@ -53,7 +53,7 @@ export default function UserData() {
                     </div>
                 ) : (
                     <>
-                        <Link to="/login" className="lg:text-white lg:text-lg lg:font-semibold lg:mr-4 h-full aspect-square flex justify-center items-center rounded-lg text-accent text-3xl font-bold shadow-2xl shadow-accent"><CiUser /></Link>
+                        <Link to="/login" className="lg:text-white lg:text-lg lg:font-semibold lg:mr-4 h-full aspect-square flex justify-center items-center rounded-lg text-accent text-3xl font-bold shadow-2xl shadow-accent"><CiUser className="text-xl"/></Link>
                         {/* <Link to="/register" className=" hidden lg:block text-white text-lg font-semibold">Register</Link> */}
                     </>
                 )}

@@ -4,6 +4,7 @@ import { FaShopify } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import { HiUsers } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { MdReviews } from "react-icons/md";
 
 
 export default function MobileSideBar(props){
@@ -35,6 +36,10 @@ export default function MobileSideBar(props){
             <div className="w-full flex gap-4 items-center justify-center mt-10 border-b-1 border-gray-200">
                 <HiUsers className="text-3xl text-black"/>
                 <Link to="/admin/users" className="text-2xl text-black" onClick={menue}>Users</Link>
+            </div>
+            <div className="w-full flex gap-4 items-center justify-center mt-10 border-b-1 border-gray-200">
+                <MdReviews className="text-3xl text-black"/>
+                <Link to="/admin/reviews" className="text-2xl text-black" onClick={menue}>Reviews</Link>
             </div>
 
             

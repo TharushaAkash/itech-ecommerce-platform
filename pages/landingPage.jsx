@@ -4,6 +4,7 @@ import { FaArrowDownLong, FaLocationDot, FaMapLocation, FaVoicemail } from "reac
 import { MdOutlineAttachEmail } from "react-icons/md";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { Link } from "react-router-dom";
+import LandingPageReviews from "../src/components/landingPageReviews";
 
 
 export default function LandingPage(){
@@ -112,6 +113,14 @@ export default function LandingPage(){
                         ))}
                     </div>
                 </section>
+
+                <section className="w-full p-5">
+                    <h1 className="text-center font-bold mb-10 text-3xl text-accent">What our Customers Say...</h1>
+                    <LandingPageReviews />
+
+                </section>
+
+
 
                 {/* Footer (PC) */}
                 <footer id="footer" className="w-full bg-gray-900 text-gray-300 mt-20 pt-16 pb-8 px-10">
@@ -277,6 +286,12 @@ export default function LandingPage(){
                             </div>
                         ))}
                     </div>
+                </section>
+
+                <section className="w-full p-5">
+                    <h1 className="text-center font-bold mb-10 text-3xl text-accent">What our Customers Say...</h1>
+                    <LandingPageReviews />
+
                 </section>
 
                 {/* Footer (Mobile) */}

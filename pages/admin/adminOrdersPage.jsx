@@ -161,7 +161,7 @@ export default function AdminOrdersPage(){
                                         </td>
 
                                         <td className="text-center font-bold text-gray-700">
-                                            <span className={`${order.status === "Pending" ? "bg-yellow-200 border border-yellow-700 text-yellow-700" : order.status === "Processing" ? "bg-blue-200 border border-blue-600 text-blue-700" : order.status === "Shipped" ? "bg-green-200 border border-green-700 text-green-700" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>
+                                            <span className={`${order.status === "Pending" ? "bg-yellow-200 border border-yellow-700 text-yellow-700" : order.status === "Processing" ? "bg-yellow-400 border border-yellow-800 text-yellow-800" : order.status === "Shipped" ? "bg-green-200 border border-green-700 text-green-700" : order.status === "Delivered" ? "bg-blue-300 border border-blue-700 text-blue-700" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>
                                                 {order.status}
                                             </span>
                                             
@@ -208,7 +208,7 @@ export default function AdminOrdersPage(){
                                     <div className="flex flex-col gap-2">
                                         <div className="justify-between flex items-center">
                                             <h1 className="flex gap-2 items-center"><span className="text-blue-700 font-bold text-xl p-2"><LuClipboardList /></span>#{order.orderId}</h1>
-                                            <h1 className={`${order.status=== "Pending" ? "bg-yellow-200 border border-yellow-700 text-yellow-700" : order.status === "Processing" ? "bg-blue-200 border border-blue-600 text-blue-700" : order.status === "Shipped" ? "bg-green-200 border border-green-700 text-green-70" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>{order.status}</h1>
+                                            <h1 className={`${order.status=== "Pending" ? "bg-yellow-200 border border-yellow-700 text-yellow-700" : order.status === "Processing" ? "bg-yellow-400 border border-yellow-800 text-yellow-800" : order.status === "Shipped" ? "bg-green-200 border border-green-700 text-green-70" : order.status === "Delivered" ? "bg-blue-300 border border-blue-700 text-blue-700" : "bg-red-200 border border-red-700 text-red-700"} px-4 py-2 rounded-full`}>{order.status}</h1>
                                         </div>
                                         <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><FaRegUser /></span>{order.firstName} {order.lastName}</h1>
                                         <h1 className="flex gap-2"><span className="text-blue-700 font-bold bg-gray-200 rounded-full p-2"><MdEmail /></span>{order.email}</h1>

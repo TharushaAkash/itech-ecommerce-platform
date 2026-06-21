@@ -7,6 +7,7 @@ import { TiThMenu } from "react-icons/ti";
 import { useState } from "react";
 import MobileSideBar from "../src/components/mobileSideBar";
 import AdminUsersPage from "./admin/adminUsersPage";
+import AdminFeedBackPage from "./admin/adminFeedBackPage";
 
 export default function AdminPage(){
 
@@ -21,6 +22,7 @@ export default function AdminPage(){
                 <Link to="/admin" className="block py-2 hover:bg-gray-700">Orders</Link>
                 <Link to="/admin/products" className="block py-2 hover:bg-gray-700">Products</Link>
                 <Link to="/admin/users" className="block py-2 hover:bg-gray-700">Users</Link>
+                <Link to="/admin/reviews" className="block py-2 hover:bg-gray-700">Reviews /Ratings</Link>
             </div>
 
             {/* Side bar for mobile devices */}
@@ -43,6 +45,7 @@ export default function AdminPage(){
                     <Route path="/add-products" element={<AddProduct />} />
                     <Route path="/users" element={<AdminUsersPage />}/>
                     <Route path="/edit-product" element={<AdminEditProduct />}/>
+                    <Route path="/reviews" element={<AdminFeedBackPage />} />
                 </Routes>
 
             </div>
