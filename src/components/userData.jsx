@@ -17,7 +17,12 @@ export default function UserData() {
                     }
                 })
                     .then(response => {
-                        setUser(response.data)
+                        if (response.data && response.data.user) {
+                            setUser(response.data)
+                        } else {
+                            localStorage.removeItem("token");
+                            setUser(null);
+                        }
                     }).catch(error => {
                         console.log(error)
                     })
@@ -27,7 +32,7 @@ export default function UserData() {
     return (
         <div>
             {
-                user ? (
+                user?.user ? (
                     <div className="flex items-center justify-center h-full aspect-square lg:w-auto lg:aspect-auto relative rounded-lg">
                         <img src={user.image} referrerPolicy='no-referrer' alt="User" className="w-full h-full lg:w-[40px] lg:h-[40px] absolute lg:static rounded-full object-cover z-0" />
 
