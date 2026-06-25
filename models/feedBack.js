@@ -25,6 +25,11 @@ const feedBackSchema = new mongoose.Schema(
             required: true
         },
 
+        productId: {
+            type: String,
+            required: true
+        },
+
         subject: {
             type: String,
 

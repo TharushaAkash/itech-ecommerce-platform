@@ -18,6 +18,7 @@ export default async function createFeedBack(req, res){
                 name: req.body.name,
                 email: req.body.email,
                 orderId: req.body.orderId,
+                productId: req.body.productId,
                 rating: req.body.rating,
                 image: req.user.image,
                 subject: req.body.subject,
@@ -82,6 +83,20 @@ export async function getPositiveFeedBacks(req, res){
     }catch(err){
         res.status(500).json({
             message: "There is a problem on retriewing feedbacks"
+        })
+    }
+}
+
+export async function getFeedBacksByProduct(req, res){
+    try{
+        const productId = req.params.productId;
+        const feedBacks = await FeedBack.find({productId: productId});
+        res.status(200).json({
+            feedBacks: feedBacks
+        })
+    }catch(err){
+        res.status(500).json({
+            message: "Error"
         })
     }
 }
