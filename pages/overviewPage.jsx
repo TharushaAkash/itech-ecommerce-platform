@@ -16,13 +16,16 @@ import { FaShieldAlt } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { GiReturnArrow } from "react-icons/gi";
 import { addToCart, getCart } from "../src/utils/cart";
+import { FaStar } from "react-icons/fa6";
 
 export default function OverviewPage(){
     const parameters  = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [productLoading, setProductLoading] = useState(false);
-    const [status, setStatus] = useState("loading")
+    const [status, setStatus] = useState("loading");
+    const [reviews, setReviews] = useState([]);
+    const [reviewsLoading, setReviewsLoading] = useState(true);
 
     useEffect(
         () => {
@@ -30,15 +33,23 @@ export default function OverviewPage(){
             api.get("/products/"+parameters.productId).then(
                 (response) => {
                     setProduct(response.data.product);
-                    console.log(response.data.product);
                     setStatus("success");
-                    console.log(status)
                 }
             ).catch(
                 (error) => {
                     setStatus("error");
                     toast.error(error?.response?.data?.message || "Error fetching product. Plz try again");
-                    console.error("Error fetching product: ", error);
+                }
+            )
+
+            api.get("/feedback/product/"+parameters.productId).then(
+                (response) => {
+                    setReviews(response.data.feedBacks);
+                    setReviewsLoading(false);
+                }
+            ).catch(
+                (error) => {
+                    setReviewsLoading(false);
                 }
             )
         },[]
@@ -204,6 +215,65 @@ export default function OverviewPage(){
                     </div>
 
                 </div>
+
+                <div className="w-full mb-20">
+                    <h2 className="text-2xl font-bold mb-5">Product Reviews</h2>
+                    {
+                        reviewsLoading ? <LoadingAnimation /> :
+                        reviews.length > 0 ? (
+                            <div className="flex gap-4 w-full h-[250px] overflow-x-auto scrollbar-hide scroll-smooth">
+                                {
+                                    reviews.map((review, index) => {
+                                        return(
+                                            <div key={index} className="h-full min-w-[300px] bg-white rounded-xl p-3 shadow-md">
+                                                <div className="flex items-center justify-evenly">
+                                                    <div className="m-2 flex gap-3">
+                                                        <img  className="w-[30px] h-[30px] rounded-full object-cover" src={review.image}/>
+                                                        <div className="flex flex-col">
+                                                            <h3 className="font-bold text-sm">{review.name}</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        {[1, 2, 3, 4, 5].map((star)=>{
+                                                            return(
+                                                                <FaStar
+                                                                    key={star}
+                                                                    size={10}
+                                                                    className={star <= review.rating ? "text-yellow-400" : "text-gray-300"}
+                                                                />
+                                                            )
+                                                        })}
+                                                        <p className="ml-2 text-sm">{review.rating}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-2 mt-3">
+                                                    <h2 className="text-black font-semibold text-md">{review.subject}</h2>
+                                                    <p className="text-gray-600 font-semibold">{review.message.length > 50 ? review.message.substring(0, 50) + "..." : review.message}</p>
+                                                </div>
+                                                {
+                                                    review.pictures && review.pictures.length > 0 && (
+                                                        <div className="flex overflow-x-auto gap-3 mt-5">
+                                                            {
+                                                                review.pictures.map((img, idx) => {
+                                                                    return(
+                                                                        <img key={idx} className="w-[80px] h-[80px] rounded-lg object-cover border border-gray-200" src={img} alt="Review" />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        ) : (
+                            <p className="text-gray-500 font-semibold">No reviews yet for this product.</p>
+                        )
+                    }
+                </div>
+
                 </div>
                 
 

@@ -18,9 +18,10 @@ export default function CustomerFeedbackModal(props){
     const token = localStorage.getItem("token");
     const [isLoading, setIsLoading] = useState(false);
 
+    const [productId, setProductId] = useState(order.items[0].product.productId);
+
 async function handleFeedBack(){
     try{
-    //Upload images
         const mediaUrls = [];
         
         for(let i=0; i < pictures.length; i++){
@@ -32,6 +33,7 @@ async function handleFeedBack(){
             email: order.email,
             rating: rating,
             orderId: order.orderId,
+            productId: productId,
             subject: subject,
             message: message,
             pictures: mediaUrls
@@ -95,7 +97,21 @@ async function handleFeedBack(){
                         </div>
                         <h>Rate: {rating}/5</h>
                         
-                        {/* Inputs */}
+                        <div className="flex flex-col mt-5">
+                            <label className="text-left font-semibold">Select Product:</label>
+                            <select 
+                                value={productId}
+                                onChange={((e)=>{setProductId(e.target.value)})}
+                                className="bg-gray-200 mt-2 w-full p-2 rounded-2xl focus:outline-none focus:border-2 focus:border-blue-600"
+                            >
+                                {
+                                    order.items.map((item, index) => {
+                                        return <option key={index} value={item.product.productId}>{item.product.name}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+
                         <div className="flex flex-col mt-5">
                             <label className="text-left font-semibold">Subject:</label>
                             <input 
