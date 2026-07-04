@@ -1,0 +1,15 @@
+export default function priceFormat(price){
+    //Is price is valid
+    if(price == null){
+        return "N/A"
+    }
+
+    const priceInNumber = Number(price);
+
+    if(isNaN(priceInNumber)){
+        return "N/A"
+    }else{
+        return "LKR "+priceInNumber.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    }
+
+}
