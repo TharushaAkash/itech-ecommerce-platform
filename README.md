@@ -61,15 +61,21 @@ A complete full-stack e-commerce application for tech products built with **Reac
 
 ## 📸 Screenshots
 
-> Screenshots will be added here to showcase:
-> - Landing page and product catalog
-> - Login and registration flow
-> - Shopping cart and checkout process
-> - Customer dashboard and order history
-> - Admin panel and management interface
-> - Mobile responsive views
+*Here is a preview of the application:*
 
-*[Add your screenshots here]*
+<div align="center">
+  <img src="Screenshots/Screenshot%202026-07-04%20105206.png" alt="App Screenshot 1" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105223.png" alt="App Screenshot 2" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105232.png" alt="App Screenshot 3" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105242.png" alt="App Screenshot 4" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105252.png" alt="App Screenshot 5" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105301.png" alt="App Screenshot 6" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105328.png" alt="App Screenshot 7" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105338.png" alt="App Screenshot 8" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105347.png" alt="App Screenshot 9" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105358.png" alt="App Screenshot 10" width="48%" />
+  <img src="Screenshots/Screenshot%202026-07-04%20105503.png" alt="App Screenshot 11" width="48%" />
+</div>
 
 ---
 
